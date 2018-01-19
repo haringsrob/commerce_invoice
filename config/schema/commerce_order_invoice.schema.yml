@@ -1,0 +1,13 @@
+commerce_order_invoice.settings:
+  type: config_entity
+  label: Settings
+  mapping:
+    invoice_number_generator:
+      type: string
+      label: 'Invoice number generator'
+    invoice_number_padding:
+      type: integer
+      label: 'Invoice number padding'
+    invoice_number_pattern:
+      type: string
+      label: 'Invoice number pattern'

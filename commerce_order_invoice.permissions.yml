@@ -1,0 +1,9 @@
+add invoice entities:
+  title: 'Create new Invoice entities'
+
+view own invoice entities:
+  title: 'View own Invoice entities'
+
+administer commerce_order_invoice:
+  title: 'Administer commerce_order_invoice'
+  restrict access: true

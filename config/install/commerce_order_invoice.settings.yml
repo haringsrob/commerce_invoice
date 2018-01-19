@@ -1,0 +1,3 @@
+invoice_number_padding: 0
+invoice_number_pattern: '{invoice_number}'
+invoice_number_generator: 'infinite'

@@ -1,0 +1,12 @@
+entity.invoice.collection:
+  title: 'Invoices'
+  route_name: entity.invoice.collection
+  description: 'Lists all invoices'
+  parent: commerce.admin_commerce
+  weight: 100
+
+invoice.admin.structure.settings:
+  title: Invoice settings
+  description: 'Configure Invoice'
+  route_name: invoice.settings
+  parent: commerce.configuration

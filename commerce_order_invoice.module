@@ -1,0 +1,47 @@
+<?php
+
+/**
+ * @file
+ * Contains hooks for commerce_order_invoice.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_entity_operation().
+ */
+function commerce_order_invoice_entity_operation(EntityInterface $entity) {
+  $operations = [];
+  if ($entity->getEntityTypeId() === 'commerce_order') {
+    if (\Drupal::currentUser()
+      ->hasPermission('administer commerce_order_invoice')) {
+      $operations = [];
+      $operations['invoice'] = [
+        'title' => t('Create invoice from order'),
+        'url' => Url::fromRoute('entity.invoice.generate_invoice', [
+          'commerce_order' => $entity->id(),
+        ]),
+        'weight' => 15,
+      ];
+    }
+  }
+  return $operations;
+}
+
+/**
+ * WARNING: Permanently deletes all invoice data.
+ *
+ * This should only be used to clean up a database. All invoice data will be
+ * lost.
+ *
+ * You should run "ALTER TABLE `invoice` AUTO_INCREMENT=1;" to reset the invoice
+ * ids.
+ */
+function commerce_order_invoice_clear_invoices() {
+  \Drupal::keyValue('commerce_order_invoice')->delete('last_invoice_number');
+  $invoice_ids = \Drupal::entityQuery('invoice')->execute();
+  $storage_handler = \Drupal::entityTypeManager()->getStorage('invoice');
+  $entities = $storage_handler->loadMultiple($invoice_ids);
+  $storage_handler->delete($entities);
+}

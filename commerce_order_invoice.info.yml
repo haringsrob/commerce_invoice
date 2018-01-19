@@ -1,0 +1,11 @@
+name: Commerce order invoice
+type: module
+description: Adds invoicing action to orders
+core: 8.x
+package: commerce
+dependencies:
+  - commerce_order
+  - commerce_product
+config_devel:
+  install:
+    - views.view.invoice_item_table

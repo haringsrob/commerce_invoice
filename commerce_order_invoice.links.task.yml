@@ -1,0 +1,30 @@
+invoice.settings_tab:
+  route_name: invoice.settings
+  title: 'Settings'
+  base_route: invoice.settings
+
+entity.invoice.canonical:
+  route_name: entity.invoice.canonical
+  base_route: entity.invoice.canonical
+  title: 'View'
+
+entity.invoice.collection:
+  route_name: entity.invoice.collection
+  base_route: entity.invoice.collection
+  title: 'Invoices'
+
+entity.invoice.invoice:
+  route_name: entity.invoice.generate_invoice
+  base_route: entity.commerce_order.canonical
+  title: 'Invoice'
+
+entity.invoice.add:
+  route_name: entity.invoice.add
+  base_route: entity.invoice.collection
+  title: 'Create invoice'
+
+
+entity.invoice.edit_form:
+  route_name: 'entity.invoice.edit_form'
+  base_route: 'entity.invoice.canonical'
+  title: 'Edit'
