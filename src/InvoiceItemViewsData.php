@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\commerce_order_invoice;
+namespace Drupal\commerce_invoice;
 
 use Drupal\views\EntityViewsData;
 

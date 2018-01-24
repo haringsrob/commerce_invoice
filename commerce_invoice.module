@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains hooks for commerce_order_invoice.
+ * Contains hooks for commerce_invoice.
  */
 
 use Drupal\Core\Entity\EntityInterface;
@@ -11,11 +11,11 @@ use Drupal\Core\Url;
 /**
  * Implements hook_entity_operation().
  */
-function commerce_order_invoice_entity_operation(EntityInterface $entity) {
+function commerce_invoice_entity_operation(EntityInterface $entity) {
   $operations = [];
   if ($entity->getEntityTypeId() === 'commerce_order') {
     if (\Drupal::currentUser()
-      ->hasPermission('administer commerce_order_invoice')) {
+      ->hasPermission('administer commerce_invoice')) {
       $operations = [];
       $operations['invoice'] = [
         'title' => t('Create invoice from order'),
@@ -38,8 +38,8 @@ function commerce_order_invoice_entity_operation(EntityInterface $entity) {
  * You should run "ALTER TABLE `invoice` AUTO_INCREMENT=1;" to reset the invoice
  * ids.
  */
-function commerce_order_invoice_clear_invoices() {
-  \Drupal::keyValue('commerce_order_invoice')->delete('last_invoice_number');
+function commerce_invoice_clear_invoices() {
+  \Drupal::keyValue('commerce_invoice')->delete('last_invoice_number');
   $invoice_ids = \Drupal::entityQuery('invoice')->execute();
   $storage_handler = \Drupal::entityTypeManager()->getStorage('invoice');
   $entities = $storage_handler->loadMultiple($invoice_ids);

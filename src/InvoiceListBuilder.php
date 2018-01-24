@@ -1,15 +1,15 @@
 <?php
 
-namespace Drupal\commerce_order_invoice;
+namespace Drupal\commerce_invoice;
 
-use Drupal\commerce_order_invoice\Entity\InvoiceInterface;
+use Drupal\commerce_invoice\Entity\InvoiceInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityListBuilder;
 
 /**
  * Defines a class to build a listing of Invoice entities.
  *
- * @ingroup commerce_order_invoice
+ * @ingroup commerce_invoice
  */
 class InvoiceListBuilder extends EntityListBuilder {
 
@@ -29,7 +29,7 @@ class InvoiceListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildRow(EntityInterface $invoice) {
-    /* @var $invoice \Drupal\commerce_order_invoice\Entity\Invoice */
+    /* @var $invoice \Drupal\commerce_invoice\Entity\Invoice */
     $row['id'] = $invoice->get('id')->getString();
     $row['invoice_number'] = $invoice->get('invoice_number')->getString();
     $row['status'] = $invoice->isLocked() ? t('Complete') : t('Draft');
@@ -45,7 +45,7 @@ class InvoiceListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function getDefaultOperations(EntityInterface $invoice) {
-    /** @var \Drupal\commerce_order_invoice\Entity\InvoiceInterface $invoice */
+    /** @var \Drupal\commerce_invoice\Entity\InvoiceInterface $invoice */
     $operations = [];
     if ($invoice->access('view') && $invoice->hasLinkTemplate('canonical')) {
       $operations['view'] = [

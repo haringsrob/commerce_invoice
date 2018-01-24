@@ -1,5 +1,5 @@
 {
-  "name": "drupal/commerce_order_invoice",
+  "name": "drupal/commerce_invoice",
   "type": "drupal-module",
   "description": "Adds invoicing action to orders",
   "keywords": [
@@ -8,11 +8,11 @@
     "Invoice"
   ],
   "license": "GPL-2.0+",
-  "homepage": "https://www.drupal.org/project/commerce_order_invoice",
+  "homepage": "https://www.drupal.org/project/commerce_invoice",
   "minimum-stability": "dev",
   "support": {
-    "issues": "https://www.drupal.org/project/issues/commerce_order_invoice",
-    "source": "http://cgit.drupalcode.org/commerce_order_invoice"
+    "issues": "https://www.drupal.org/project/issues/commerce_invoice",
+    "source": "http://cgit.drupalcode.org/commerce_invoice"
   },
   "require": {
     "drupal/core": "~8.4",

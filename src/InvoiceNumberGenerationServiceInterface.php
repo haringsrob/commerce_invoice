@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\commerce_order_invoice;
+namespace Drupal\commerce_invoice;
 
 /**
  * Defines the invoice number service interface. The service is responsible for

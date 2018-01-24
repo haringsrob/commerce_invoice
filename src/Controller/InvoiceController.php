@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\commerce_order_invoice\Controller;
+namespace Drupal\commerce_invoice\Controller;
 
 use Drupal\Core\Entity\Controller\EntityViewController;
 use Drupal\Core\Entity\EntityInterface;

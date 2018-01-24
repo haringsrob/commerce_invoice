@@ -1,9 +1,9 @@
 <?php
 
-namespace Drupal\commerce_order_invoice\Form;
+namespace Drupal\commerce_invoice\Form;
 
-use Drupal\commerce_order_invoice\InvoiceNumberFormatterInterface;
-use Drupal\commerce_order_invoice\InvoiceNumberGeneratorManager;
+use Drupal\commerce_invoice\InvoiceNumberFormatterInterface;
+use Drupal\commerce_invoice\InvoiceNumberGeneratorManager;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -12,21 +12,21 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Class InvoiceSettingsForm.
  *
- * @ingroup commerce_order_invoice
+ * @ingroup commerce_invoice
  */
 class InvoiceSettingsForm extends ConfigFormBase {
 
   /**
    * The order number generator manager.
    *
-   * @var \Drupal\commerce_order_invoice\InvoiceNumberGeneratorManager
+   * @var \Drupal\commerce_invoice\InvoiceNumberGeneratorManager
    */
   protected $orderNumberGeneratorManager;
 
   /**
    * The order number formatter.
    *
-   * @var \Drupal\commerce_order_invoice\InvoiceNumberFormatterInterface
+   * @var \Drupal\commerce_invoice\InvoiceNumberFormatterInterface
    */
   protected $orderNumberFormatter;
 
@@ -35,9 +35,9 @@ class InvoiceSettingsForm extends ConfigFormBase {
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
-   * @param \Drupal\commerce_order_invoice\InvoiceNumberGeneratorManager $order_number_generator_manager
+   * @param \Drupal\commerce_invoice\InvoiceNumberGeneratorManager $order_number_generator_manager
    *   The order number generator manager.
-   * @param \Drupal\commerce_order_invoice\InvoiceNumberFormatterInterface $order_number_formatter
+   * @param \Drupal\commerce_invoice\InvoiceNumberFormatterInterface $order_number_formatter
    *   The order number formatter.
    */
   public function __construct(ConfigFactoryInterface $config_factory, InvoiceNumberGeneratorManager $order_number_generator_manager, InvoiceNumberFormatterInterface $order_number_formatter) {
@@ -53,8 +53,8 @@ class InvoiceSettingsForm extends ConfigFormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
-      $container->get('plugin.manager.commerce_order_invoice_number_generator'),
-      $container->get('commerce_order_invoice.invoice_number_formatter')
+      $container->get('plugin.manager.commerce_invoice_number_generator'),
+      $container->get('commerce_invoice.invoice_number_formatter')
     );
   }
 
@@ -69,7 +69,7 @@ class InvoiceSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $this->configFactory->getEditable('commerce_order_invoice.settings')
+    $this->configFactory->getEditable('commerce_invoice.settings')
       ->set('invoice_number_pattern', $form_state->getValue('invoice_number_pattern'))
       ->set('invoice_number_padding', $form_state->getValue('invoice_number_padding'))
       ->set('invoice_number_generator', $form_state->getValue('invoice_number_generator'))
@@ -82,7 +82,7 @@ class InvoiceSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $config = $this->config('commerce_order_invoice.settings');
+    $config = $this->config('commerce_invoice.settings');
 
     $generator_plugins = array_map(function ($definition) {
       return sprintf('%s (%s)', $definition['label'], $definition['description']);
@@ -133,7 +133,7 @@ class InvoiceSettingsForm extends ConfigFormBase {
    */
   protected function getEditableConfigNames() {
     return [
-      'commerce_order_invoice.settings',
+      'commerce_invoice.settings',
     ];
   }
 

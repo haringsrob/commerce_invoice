@@ -1,7 +1,7 @@
 entity.invoice.generate_invoice:
   path: '/admin/commerce/orders/{commerce_order}/invoice/create'
   defaults:
-    _form: '\Drupal\commerce_order_invoice\Form\InvoiceAddForm'
+    _form: '\Drupal\commerce_invoice\Form\InvoiceAddForm'
     _title: 'Create invoice for order'
   options:
       _admin_route: true
@@ -9,22 +9,22 @@ entity.invoice.generate_invoice:
         commerce_order:
           type: 'entity:commerce_order'
   requirements:
-    _permission: 'administer commerce_order_invoice'
+    _permission: 'administer commerce_invoice'
 
 entity.invoice.add:
   path: '/admin/commerce/invoices/create'
   options:
     _admin_route: true
   defaults:
-    _form: '\Drupal\commerce_order_invoice\Form\InvoiceAddForm'
+    _form: '\Drupal\commerce_invoice\Form\InvoiceAddForm'
     _title: 'Create invoice'
   requirements:
-    _permission: 'administer commerce_order_invoice'
+    _permission: 'administer commerce_invoice'
 
 invoice.settings:
   path: '/admin/commerce/config/invoices'
   defaults:
-    _form: '\Drupal\commerce_order_invoice\Form\InvoiceSettingsForm'
+    _form: '\Drupal\commerce_invoice\Form\InvoiceSettingsForm'
     _title: 'Invoice settings'
   requirements:
-    _permission: 'administer commerce_order_invoice'
+    _permission: 'administer commerce_invoice'

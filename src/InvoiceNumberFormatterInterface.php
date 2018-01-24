@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\commerce_order_invoice;
+namespace Drupal\commerce_invoice;
 
 /**
  * Defines the order number formatter interface.
@@ -21,7 +21,7 @@ interface InvoiceNumberFormatterInterface {
    * internally. It is exposed to be able to simulate order formatting, e.g. on
    * configuration pages.
    *
-   * @param \Drupal\commerce_order_invoice\InvoiceNumber $order_number
+   * @param \Drupal\commerce_invoice\InvoiceNumber $order_number
    *   The order number value object.
    * @param int|null $number_padding
    *   Pad the order number with leading zeroes. 0 or less means no padding.

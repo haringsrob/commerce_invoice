@@ -1,4 +1,4 @@
-commerce_order_invoice.settings:
+commerce_invoice.settings:
   type: config_entity
   label: Settings
   mapping:

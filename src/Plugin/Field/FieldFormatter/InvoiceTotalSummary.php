@@ -1,8 +1,8 @@
 <?php
 
-namespace Drupal\commerce_order_invoice\Plugin\Field\FieldFormatter;
+namespace Drupal\commerce_invoice\Plugin\Field\FieldFormatter;
 
-use Drupal\commerce_order\OrderTotalSummaryInterface;
+use Drupal\commerce_invoice\InvoiceTotalSummaryInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
@@ -46,13 +46,13 @@ class InvoiceTotalSummary extends FormatterBase implements ContainerFactoryPlugi
    *   The view mode.
    * @param array $third_party_settings
    *   Any third party settings.
-   * @param \Drupal\commerce_order\OrderTotalSummaryInterface $order_total_summary
+   * @param \Drupal\commerce_invoice\InvoiceTotalSummaryInterface $invoice_total_summary
    *   The order total summary service.
    */
-  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, OrderTotalSummaryInterface $order_total_summary) {
+  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, InvoiceTotalSummaryInterface $invoice_total_summary) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
 
-    $this->invoiceTotalSummary = $order_total_summary;
+    $this->invoiceTotalSummary = $invoice_total_summary;
   }
 
   /**
@@ -67,7 +67,7 @@ class InvoiceTotalSummary extends FormatterBase implements ContainerFactoryPlugi
       $configuration['label'],
       $configuration['view_mode'],
       $configuration['third_party_settings'],
-      $container->get('commerce_order.order_total_summary')
+      $container->get('commerce_invoice.invoice_total_summary')
     );
   }
 
@@ -75,10 +75,10 @@ class InvoiceTotalSummary extends FormatterBase implements ContainerFactoryPlugi
    * {@inheritdoc}
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
-    $order = $items->getEntity();
+    $invoice = $items->getEntity();
     return [
       '#theme' => 'commerce_order_total_summary',
-      '#totals' => $this->invoiceTotalSummary->buildTotals($order),
+      '#totals' => $this->invoiceTotalSummary->buildTotals($invoice),
     ];
   }
 

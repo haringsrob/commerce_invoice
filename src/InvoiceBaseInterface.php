@@ -1,11 +1,11 @@
 <?php
 
-namespace Drupal\commerce_order_invoice;
+namespace Drupal\commerce_invoice;
 
 /**
  * Class InvoiceInterface.
  *
- * @package Drupal\commerce_order_invoice
+ * @package Drupal\commerce_invoice
  */
 interface InvoiceBaseInterface {
 

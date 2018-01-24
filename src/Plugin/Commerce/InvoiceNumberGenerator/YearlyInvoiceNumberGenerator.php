@@ -1,8 +1,8 @@
 <?php
 
-namespace Drupal\commerce_order_invoice\Plugin\Commerce\InvoiceNumberGenerator;
+namespace Drupal\commerce_invoice\Plugin\Commerce\InvoiceNumberGenerator;
 
-use Drupal\commerce_order_invoice\InvoiceNumber;
+use Drupal\commerce_invoice\InvoiceNumber;
 
 /**
  * Provides the yearly invoice number generator.

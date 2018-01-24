@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\commerce_order_invoice\Plugin\Field\FieldFormatter;
+namespace Drupal\commerce_invoice\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;

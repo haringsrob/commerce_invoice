@@ -1,8 +1,8 @@
 <?php
 
-namespace Drupal\commerce_order_invoice\Plugin\Commerce\InvoiceNumberGenerator;
+namespace Drupal\commerce_invoice\Plugin\Commerce\InvoiceNumberGenerator;
 
-use Drupal\commerce_order_invoice\InvoiceNumber;
+use Drupal\commerce_invoice\InvoiceNumber;
 use Drupal\Component\Plugin\PluginInspectionInterface;
 
 /**
@@ -30,11 +30,11 @@ interface InvoiceNumberGeneratorInterface extends PluginInspectionInterface {
    * Generates an order number value object, given the last known order number
    * as parameter.
    *
-   * @param \Drupal\commerce_order_invoice\InvoiceNumber|null $last_invoice_number
+   * @param \Drupal\commerce_invoice\InvoiceNumber|null $last_invoice_number
    *   The last known order number value object. Can be left NULL. In this case,
    *   a fresh instantiated increment value will be returned.
    *
-   * @return \Drupal\commerce_order_invoice\InvoiceNumber
+   * @return \Drupal\commerce_invoice\InvoiceNumber
    *   The generated order number value object. Normally, the returned object's
    *   increment number will be raised by one. Period based implementations may
    *   also reset this counter.

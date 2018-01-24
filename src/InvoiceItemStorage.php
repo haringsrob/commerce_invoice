@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\commerce_order_invoice;
+namespace Drupal\commerce_invoice;
 
 use Drupal\commerce\PurchasableEntityInterface;
 use Drupal\commerce_order\OrderItemStorage;

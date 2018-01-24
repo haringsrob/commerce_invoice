@@ -1,15 +1,13 @@
 <?php
 
-namespace Drupal\commerce_order_invoice\Entity;
-
-use Drupal\commerce_order\Entity\OrderInterface;
+namespace Drupal\commerce_invoice\Entity;
 
 /**
  * Provides an interface for defining Invoice entities.
  *
- * @ingroup commerce_order_invoice
+ * @ingroup commerce_invoice
  */
-interface InvoiceInterface extends OrderInterface {
+interface InvoiceInterface {
 
   /**
    * Gets the Invoice creation timestamp.
@@ -25,7 +23,7 @@ interface InvoiceInterface extends OrderInterface {
    * @param int $timestamp
    *   The Invoice creation timestamp.
    *
-   * @return \Drupal\commerce_order_invoice\Entity\InvoiceInterface
+   * @return \Drupal\commerce_invoice\Entity\InvoiceInterface
    *   The called Invoice entity.
    */
   public function setCreatedTime($timestamp);
@@ -45,5 +43,48 @@ interface InvoiceInterface extends OrderInterface {
    *   The formatted invoice date.
    */
   public function getInvoiceDate();
+
+  /**
+   * Collects all adjustments that belong to the order.
+   *
+   * Unlike getAdjustments() which returns only order adjustments,
+   * this method returns both order and order item adjustments.
+   *
+   * Important:
+   * The returned order item adjustments are multiplied by quantity,
+   * so that they can be safely added to the order adjustments.
+   *
+   * @return \Drupal\commerce_order\Adjustment[]
+   *   The adjustments.
+   */
+  public function collectAdjustments();
+
+  /**
+   * Gets the order subtotal price.
+   *
+   * Represents a sum of all order item totals.
+   *
+   * @return \Drupal\commerce_price\Price|null
+   *   The order subtotal price, or NULL.
+   */
+  public function getSubtotalPrice();
+
+  /**
+   * Gets the order total price.
+   *
+   * Represents a sum of all order item totals along with adjustments.
+   *
+   * @return \Drupal\commerce_price\Price|null
+   *   The order total price, or NULL.
+   */
+  public function getTotalPrice();
+
+  /**
+   * Gets the order items.
+   *
+   * @return \Drupal\commerce_invoice\Entity\InvoiceItem[]
+   *   The order items.
+   */
+  public function getItems();
 
 }

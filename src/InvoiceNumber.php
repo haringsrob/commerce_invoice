@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\commerce_order_invoice;
+namespace Drupal\commerce_invoice;
 
 /**
  * Provides a value object for incrementing invoice numbers. This is used for

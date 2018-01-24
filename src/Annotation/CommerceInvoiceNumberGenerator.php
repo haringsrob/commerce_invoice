@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\commerce_order_invoice\Annotation;
+namespace Drupal\commerce_invoice\Annotation;
 
 use Drupal\Component\Annotation\Plugin;
 

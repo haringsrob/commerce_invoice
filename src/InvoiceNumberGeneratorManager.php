@@ -1,9 +1,9 @@
 <?php
 
-namespace Drupal\commerce_order_invoice;
+namespace Drupal\commerce_invoice;
 
-use Drupal\commerce_order_invoice\Annotation\CommerceInvoiceNumberGenerator;
-use Drupal\commerce_order_invoice\Plugin\Commerce\InvoiceNumberGenerator\InvoiceNumberGeneratorInterface;
+use Drupal\commerce_invoice\Annotation\CommerceInvoiceNumberGenerator;
+use Drupal\commerce_invoice\Plugin\Commerce\InvoiceNumberGenerator\InvoiceNumberGeneratorInterface;
 use Drupal\Component\Plugin\Exception\PluginException;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -12,7 +12,7 @@ use Drupal\Core\Plugin\DefaultPluginManager;
 /**
  * Manages discovery and instantiation of invoice number generator plugins.
  *
- * @see \Drupal\commerce_order_invoice\Annotation\CommerceInvoiceNumberGenerator
+ * @see \Drupal\commerce_invoice\Annotation\CommerceInvoiceNumberGenerator
  * @see plugin_api
  */
 class InvoiceNumberGeneratorManager extends DefaultPluginManager {

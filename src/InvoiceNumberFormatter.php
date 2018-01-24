@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\commerce_order_invoice;
+namespace Drupal\commerce_invoice;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 
@@ -31,7 +31,7 @@ class InvoiceNumberFormatter implements InvoiceNumberFormatterInterface {
    */
   public function format(InvoiceNumber $order_number, $number_padding = NULL, $pattern = NULL) {
     $formatted_number = (string) $order_number->getIncrementNumber();
-    $config = $this->configFactory->get('commerce_order_invoice.settings');
+    $config = $this->configFactory->get('commerce_invoice.settings');
 
     $number_padding = (int) (NULL === $number_padding ? $config->get('invoice_number_padding') : $number_padding);
     if ($number_padding && $number_padding > 0) {

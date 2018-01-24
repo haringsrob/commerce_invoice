@@ -4,7 +4,7 @@ dependencies:
   module:
     - commerce_order
     - commerce_price
-    - commerce_order_invoice
+    - commerce_invoice
 id: invoice_item_table
 label: 'Invoice items'
 module: views

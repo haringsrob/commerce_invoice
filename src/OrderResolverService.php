@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\commerce_order_invoice;
+namespace Drupal\commerce_invoice;
 
 use Drupal\commerce_order\Entity\Order;
 
@@ -8,13 +8,6 @@ use Drupal\commerce_order\Entity\Order;
  * Class OrderResolverService.
  */
 class OrderResolverService {
-
-  /**
-   * Constructs a new OrderResolverService object.
-   */
-  public function __construct() {
-
-  }
 
   /**
    * Get the order from the current route.

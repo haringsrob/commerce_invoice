@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\commerce_order_invoice\Form;
+namespace Drupal\commerce_invoice\Form;
 
 use Drupal\commerce_order\Entity\Order;
 use Drupal\Component\Datetime\TimeInterface;
@@ -15,14 +15,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Form controller for Invoice edit forms.
  *
- * @ingroup commerce_order_invoice
+ * @ingroup commerce_invoice
  */
 class InvoiceForm extends ContentEntityForm {
 
   /**
    * The entity being used by this form.
    *
-   * @var \Drupal\commerce_order_invoice\Entity\InvoiceInterface
+   * @var \Drupal\commerce_invoice\Entity\InvoiceInterface
    */
   protected $entity;
 
@@ -197,7 +197,7 @@ class InvoiceForm extends ContentEntityForm {
     }
 
     if ($form_state->getValue('confirm', FALSE)) {
-      $invoiceNumberGenerationService = \Drupal::service('commerce_order_invoice.invoice_number_generation_service');
+      $invoiceNumberGenerationService = \Drupal::service('commerce_invoice.invoice_number_generation_service');
       $invoice_number = $invoiceNumberGenerationService->generateAndSetInvoiceNumber();
 
       $entity->set('invoice_number', $invoice_number);

@@ -1,0 +1,16 @@
+services:
+  commerce_invoice.invoice_number_formatter:
+    class: Drupal\commerce_invoice\InvoiceNumberFormatter
+    arguments: ['@config.factory']
+  commerce_invoice.invoice_number_generation_service:
+    class: Drupal\commerce_invoice\InvoiceNumberGenerationService
+    arguments: ['@config.factory', '@keyvalue', '@lock', '@commerce_invoice.invoice_number_formatter', '@plugin.manager.commerce_invoice_number_generator']
+  plugin.manager.commerce_invoice_number_generator:
+    class: Drupal\commerce_invoice\InvoiceNumberGeneratorManager
+    parent: default_plugin_manager
+  commerce_invoice.order_resolver:
+    class: Drupal\commerce_invoice\OrderResolverService
+    arguments: []
+  commerce_invoice.invoice_total_summary:
+    class: Drupal\commerce_invoice\InvoiceTotalSummary
+    arguments: ['@plugin.manager.commerce_adjustment_type']

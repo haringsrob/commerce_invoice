@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\commerce_order_invoice\Plugin\Field\FieldWidget;
+namespace Drupal\commerce_invoice\Plugin\Field\FieldWidget;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;

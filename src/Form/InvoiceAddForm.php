@@ -1,12 +1,12 @@
 <?php
 
-namespace Drupal\commerce_order_invoice\Form;
+namespace Drupal\commerce_invoice\Form;
 
 use Drupal\commerce_order\Entity\OrderInterface;
 use Drupal\commerce_order\Form\CustomerFormTrait;
-use Drupal\commerce_order_invoice\Entity\InvoiceInterface;
-use Drupal\commerce_order_invoice\Entity\InvoiceItem;
-use Drupal\commerce_order_invoice\OrderResolverService;
+use Drupal\commerce_invoice\Entity\InvoiceInterface;
+use Drupal\commerce_invoice\Entity\InvoiceItem;
+use Drupal\commerce_invoice\OrderResolverService;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -37,7 +37,7 @@ class InvoiceAddForm extends FormBase {
   /**
    * The order resolver service.
    *
-   * @var \Drupal\commerce_order_invoice\OrderResolverService
+   * @var \Drupal\commerce_invoice\OrderResolverService
    */
   private $orderResolver;
 
@@ -46,7 +46,7 @@ class InvoiceAddForm extends FormBase {
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
-   * @param \Drupal\commerce_order_invoice\OrderResolverService $orderResolverService
+   * @param \Drupal\commerce_invoice\OrderResolverService $orderResolverService
    *   The order resolver.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
@@ -62,13 +62,14 @@ class InvoiceAddForm extends FormBase {
    *
    * In exceptional cases the resolver is not created when this class is called.
    *
-   * @return \Drupal\commerce_order_invoice\OrderResolverService
+   * @return \Drupal\commerce_invoice\OrderResolverService
    *   The order resolver service.
    */
   private function getOrderResolver() {
     if (NULL === $this->orderResolver) {
-      return new OrderResolverService();
+      $this->orderResolver = new OrderResolverService();
     }
+    return $this->orderResolver;
   }
 
   /**
@@ -77,7 +78,7 @@ class InvoiceAddForm extends FormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('entity_type.manager'),
-      $container->get('commerce_order_invoice.order_resolver')
+      $container->get('commerce_invoice.order_resolver')
     );
   }
 
@@ -85,7 +86,7 @@ class InvoiceAddForm extends FormBase {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'commerce_order_invoice_add_form';
+    return 'commerce_invoice_add_form';
   }
 
   /**
@@ -144,7 +145,7 @@ class InvoiceAddForm extends FormBase {
       $invoice_data['order_id'] = $order;
     }
 
-    /** @var \Drupal\commerce_order_invoice\Entity\InvoiceInterface $invoice */
+    /** @var \Drupal\commerce_invoice\Entity\InvoiceInterface $invoice */
     $invoice = $this->invoiceStorage->create($invoice_data);
     $this->copyOrderDataIfPresent($invoice);
     $invoice->save();
@@ -156,7 +157,7 @@ class InvoiceAddForm extends FormBase {
   /**
    * Copies the order data to the invoice if there is one.
    *
-   * @param \Drupal\commerce_order_invoice\Entity\InvoiceInterface $invoice
+   * @param \Drupal\commerce_invoice\Entity\InvoiceInterface $invoice
    *   The invoice entity.
    *
    * @todo: This needs to be rewritten.
@@ -196,7 +197,7 @@ class InvoiceAddForm extends FormBase {
    *
    * @param \Drupal\commerce_order\Entity\OrderInterface $order
    *   Order.
-   * @param \Drupal\commerce_order_invoice\Entity\InvoiceInterface $invoice
+   * @param \Drupal\commerce_invoice\Entity\InvoiceInterface $invoice
    *   Invoice.
    *
    * @todo: This code needs to be improved.

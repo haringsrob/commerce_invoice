@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\commerce_order_invoice\Exception;
+namespace Drupal\commerce_invoice\Exception;
 
 /**
  * Exception class for already existing invoices.

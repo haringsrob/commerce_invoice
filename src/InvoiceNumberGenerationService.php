@@ -1,9 +1,9 @@
 <?php
 
-namespace Drupal\commerce_order_invoice;
+namespace Drupal\commerce_invoice;
 
 use Drupal\commerce_order\Entity\OrderInterface;
-use Drupal\commerce_order_invoice\Entity\InvoiceInterface;
+use Drupal\commerce_invoice\Entity\InvoiceInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\KeyValueStore\KeyValueFactoryInterface;
 use Drupal\Core\Lock\LockBackendInterface;
@@ -37,14 +37,14 @@ class InvoiceNumberGenerationService implements InvoiceNumberGenerationServiceIn
   /**
    * The order number formatter.
    *
-   * @var \Drupal\commerce_order_invoice\InvoiceNumberFormatterInterface
+   * @var \Drupal\commerce_invoice\InvoiceNumberFormatterInterface
    */
   protected $invoiceNumberFormatter;
 
   /**
    * The order number generator manager.
    *
-   * @var \Drupal\commerce_order_invoice\InvoiceNumberGeneratorManager
+   * @var \Drupal\commerce_invoice\InvoiceNumberGeneratorManager
    */
   protected $invoiceNumberGeneratorManager;
 
@@ -57,14 +57,14 @@ class InvoiceNumberGenerationService implements InvoiceNumberGenerationServiceIn
    *   The key value factory.
    * @param \Drupal\Core\Lock\LockBackendInterface $lock
    *   The locking layer instance.
-   * @param \Drupal\commerce_order_invoice\InvoiceNumberFormatterInterface $invoice_number_formatter
+   * @param \Drupal\commerce_invoice\InvoiceNumberFormatterInterface $invoice_number_formatter
    *   The order number formatter.
-   * @param \Drupal\commerce_order_invoice\InvoiceNumberGeneratorManager $invoice_number_generator_manager
+   * @param \Drupal\commerce_invoice\InvoiceNumberGeneratorManager $invoice_number_generator_manager
    *   The order number generator manager.
    */
   public function __construct(ConfigFactoryInterface $config_factory, KeyValueFactoryInterface $key_value_factory, LockBackendInterface $lock, InvoiceNumberFormatterInterface $invoice_number_formatter, InvoiceNumberGeneratorManager $invoice_number_generator_manager) {
     $this->configFactory = $config_factory;
-    $this->keyValueStore = $key_value_factory->get('commerce_order_invoice');
+    $this->keyValueStore = $key_value_factory->get('commerce_invoice');
     $this->lock = $lock;
     $this->invoiceNumberFormatter = $invoice_number_formatter;
     $this->invoiceNumberGeneratorManager = $invoice_number_generator_manager;
@@ -74,13 +74,13 @@ class InvoiceNumberGenerationService implements InvoiceNumberGenerationServiceIn
    * {@inheritdoc}
    */
   public function generateAndSetInvoiceNumber() {
-    $config = $this->configFactory->get('commerce_order_invoice.settings');
+    $config = $this->configFactory->get('commerce_invoice.settings');
 
-    /** @var \Drupal\commerce_order_invoice\Plugin\Commerce\InvoiceNumberGenerator\InvoiceNumberGeneratorInterface $generator */
+    /** @var \Drupal\commerce_invoice\Plugin\Commerce\InvoiceNumberGenerator\InvoiceNumberGeneratorInterface $generator */
     $generator = $this->invoiceNumberGeneratorManager->createInstance($config->get('invoice_number_generator'));
 
-    while (!$this->lock->acquire('commerce_order_invoice.generator')) {
-      $this->lock->wait('commerce_order_invoice.generator');
+    while (!$this->lock->acquire('commerce_invoice.generator')) {
+      $this->lock->wait('commerce_invoice.generator');
     }
 
     $last_order_number = $this->keyValueStore->get('last_invoice_number');
@@ -104,7 +104,7 @@ class InvoiceNumberGenerationService implements InvoiceNumberGenerationServiceIn
     }
 
     $this->keyValueStore->set('last_invoice_number', $invoice_number);
-    $this->lock->release('commerce_order_invoice.generator');
+    $this->lock->release('commerce_invoice.generator');
     return $invoice_number_formatted;
   }
 
