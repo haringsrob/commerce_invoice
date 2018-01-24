@@ -10,4 +10,4 @@ Commerce invoices will generate a unique number following your pattern, and once
 
 ### Sponsors
 
-The development of this module is sponsored by (MaxPlus)[http://www.maxplus.be/]
+The development of this module is sponsored by [MaxPlus](http://www.maxplus.be/)
