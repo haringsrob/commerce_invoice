@@ -464,8 +464,11 @@ class Invoice extends CommerceContentEntityBase implements InvoiceInterface {
    *   The formatted invoice date.
    */
   public function getInvoiceDate() {
-    return \Drupal::service('date.formatter')
-      ->format($this->getInvoiceTimestamp(), 'html_date');
+    if ($this->getInvoiceTimestamp()) {
+      return \Drupal::service('date.formatter')
+        ->format($this->getInvoiceTimestamp(), 'html_date');
+    }
+    return null;
   }
 
   /**

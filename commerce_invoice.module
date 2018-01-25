@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 
 /**
@@ -19,9 +20,12 @@ function commerce_invoice_entity_operation(EntityInterface $entity) {
       $operations = [];
       $operations['invoice'] = [
         'title' => t('Create invoice from order'),
-        'url' => Url::fromRoute('entity.invoice.generate_invoice', [
-          'commerce_order' => $entity->id(),
-        ]),
+        'url' => Url::fromRoute(
+          'entity.invoice.generate_invoice',
+          [
+            'commerce_order' => $entity->id(),
+          ]
+        ),
         'weight' => 15,
       ];
     }
@@ -44,4 +48,32 @@ function commerce_invoice_clear_invoices() {
   $storage_handler = \Drupal::entityTypeManager()->getStorage('invoice');
   $entities = $storage_handler->loadMultiple($invoice_ids);
   $storage_handler->delete($entities);
+}
+
+/**
+ * Implements hook_field_widget_form_alter().
+ *
+ * - Changes the label of the purchased_entity field to the label of the
+ *   target type (e.g. 'Product variation').
+ * - Forbids editing the purchased_entity once the order item is no longer new.
+ */
+function commerce_invoice_field_widget_form_alter(
+  &$element,
+  FormStateInterface $form_state,
+  $context
+) {
+  $field_definition = $context['items']->getFieldDefinition();
+  $field_name = $field_definition->getName();
+  $entity_type = $field_definition->getTargetEntityTypeId();
+  if ($field_name == 'purchased_entity' && $entity_type == 'invoice_item') {
+    if (!empty($element['target_id']['#target_type'])) {
+      $target_type = \Drupal::service('entity_type.manager')->getDefinition(
+        $element['target_id']['#target_type']
+      );
+      $element['target_id']['#title'] = $target_type->getLabel();
+      if (!$context['items']->getEntity()->isNew()) {
+        $element['#disabled'] = TRUE;
+      }
+    }
+  }
 }

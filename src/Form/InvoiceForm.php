@@ -2,7 +2,6 @@
 
 namespace Drupal\commerce_invoice\Form;
 
-use Drupal\commerce_order\Entity\Order;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Datetime\DateFormatterInterface;

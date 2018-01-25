@@ -4,6 +4,7 @@ namespace Drupal\commerce_invoice\Entity;
 
 use Drupal\commerce\Entity\CommerceContentEntityBase;
 use Drupal\commerce_order\Adjustment;
+use Drupal\commerce_order\Entity\OrderItemInterface;
 use Drupal\commerce_order\Entity\OrderItemType;
 use Drupal\commerce_price\Price;
 use Drupal\Core\Entity\EntityChangedTrait;
@@ -294,7 +295,7 @@ class InvoiceItem extends CommerceContentEntityBase {
 
     $fields['title'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Title'))
-      ->setDescription(t('The order item title.'))
+      ->setDescription(t('The invoice item title.'))
       ->setSettings([
         'default_value' => '',
         'max_length' => 512,
