@@ -21,6 +21,7 @@ class InvoiceListBuilder extends EntityListBuilder {
     $header['invoice_number'] = $this->t('Invoice number');
     $header['status'] = $this->t('Invoice status');
     $header['date'] = $this->t('Invoice date');
+    $header['due_date'] = $this->t('Invoice due date');
     $header['order'] = $this->t('Order');
     return $header + parent::buildHeader();
   }
@@ -33,7 +34,8 @@ class InvoiceListBuilder extends EntityListBuilder {
     $row['id'] = $invoice->get('id')->getString();
     $row['invoice_number'] = $invoice->get('invoice_number')->getString();
     $row['status'] = $invoice->isLocked() ? t('Complete') : t('Draft');
-    $row['date'] = $invoice->getInvoiceDate();
+    $row['date'] = $invoice->getInvoiceDateString();
+    $row['due_date'] = $invoice->getInvoiceDueDateString();
     $row['commerce_order'] = t('No order associated');
     if ($order = $invoice->getOrder()) {
       $row['commerce_order'] = $order->toLink('View order');
