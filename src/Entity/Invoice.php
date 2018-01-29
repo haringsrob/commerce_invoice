@@ -18,7 +18,7 @@ use Drupal\user\UserInterface;
  * @ingroup commerce_invoice
  *
  * @ContentEntityType(
- *   id = "invoice",
+ *   id = "commerce_invoice",
  *   label = @Translation("Invoice"),
  *   label_singular = @Translation("invoice"),
  *   label_plural = @Translation("invoices"),
@@ -41,7 +41,7 @@ use Drupal\user\UserInterface;
  *       "default" = "Drupal\Core\Entity\Routing\DefaultHtmlRouteProvider",
  *     },
  *   },
- *   base_table = "invoice",
+ *   base_table = "commerce_invoice",
  *   admin_permission = "administer commerce_invoice",
  *   fieldable = TRUE,
  *   entity_keys = {
@@ -53,13 +53,13 @@ use Drupal\user\UserInterface;
  *     "status" = "status",
  *   },
  *   links = {
- *     "canonical" = "/admin/commerce/invoices/{invoice}",
+ *     "canonical" = "/admin/commerce/invoices/{commerce_invoice}",
  *     "add-form" = "/admin/commerce/invoices/create",
- *     "edit-form" = "/admin/commerce/invoices/{invoice}/edit",
- *     "delete-form" = "/admin/commerce/invoices/{invoice}/delete",
+ *     "edit-form" = "/admin/commerce/invoices/{commerce_invoice}/edit",
+ *     "delete-form" = "/admin/commerce/invoices/{commerce_invoice}/delete",
  *     "collection" = "/admin/commerce/invoices",
  *   },
- *   field_ui_base_route = "invoice.settings"
+ *   field_ui_base_route = "commerce_invoice.settings"
  * )
  */
 class Invoice extends CommerceContentEntityBase implements InvoiceInterface {

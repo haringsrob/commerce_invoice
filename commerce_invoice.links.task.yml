@@ -1,30 +1,29 @@
-invoice.settings_tab:
-  route_name: invoice.settings
+commerce_invoice.settings_tab:
+  route_name: commerce_invoice.settings
   title: 'Settings'
-  base_route: invoice.settings
+  base_route: commerce_invoice.settings
 
-entity.invoice.canonical:
-  route_name: entity.invoice.canonical
-  base_route: entity.invoice.canonical
+entity.commerce_invoice.canonical:
+  route_name: entity.commerce_invoice.canonical
+  base_route: entity.commerce_invoice.canonical
   title: 'View'
 
-entity.invoice.collection:
-  route_name: entity.invoice.collection
-  base_route: entity.invoice.collection
+entity.commerce_invoice.collection:
+  route_name: entity.commerce_invoice.collection
+  base_route: entity.commerce_invoice.collection
   title: 'Invoices'
 
-entity.invoice.invoice:
-  route_name: entity.invoice.generate_invoice
+entity.commerce_invoice.invoice:
+  route_name: entity.commerce_invoice.generate_invoice
   base_route: entity.commerce_order.canonical
   title: 'Invoice'
 
-entity.invoice.add:
-  route_name: entity.invoice.add
-  base_route: entity.invoice.collection
+entity.commerce_invoice.add:
+  route_name: entity.commerce_invoice.add
+  base_route: entity.commerce_invoice.collection
   title: 'Create invoice'
 
-
-entity.invoice.edit_form:
-  route_name: 'entity.invoice.edit_form'
-  base_route: 'entity.invoice.canonical'
+entity.commerce_invoice.edit_form:
+  route_name: entity.commerce_invoice.edit_form
+  base_route: entity.commerce_invoice.canonical
   title: 'Edit'

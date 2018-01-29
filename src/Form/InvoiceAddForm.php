@@ -52,7 +52,7 @@ class InvoiceAddForm extends FormBase {
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager, OrderResolverService $orderResolverService) {
-    $this->invoiceStorage = $entity_type_manager->getStorage('invoice');
+    $this->invoiceStorage = $entity_type_manager->getStorage('commerce_invoice');
     $this->storeStorage = $entity_type_manager->getStorage('commerce_store');
     $this->orderResolver = $orderResolverService;
   }
@@ -151,7 +151,7 @@ class InvoiceAddForm extends FormBase {
     $invoice->save();
 
     // Redirect to the edit form to complete the invoice.
-    $form_state->setRedirect('entity.invoice.edit_form', ['invoice' => $invoice->id()]);
+    $form_state->setRedirect('entity.commerce_invoice.edit_form', ['commerce_invoice' => $invoice->id()]);
   }
 
   /**
