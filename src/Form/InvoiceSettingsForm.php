@@ -105,6 +105,10 @@ class InvoiceSettingsForm extends ConfigFormBase {
         'invoice_number_start',
         $form_state->getValue('invoice_number_start')
       )
+      ->set(
+        'invoice_due_date_days',
+        $form_state->getValue('invoice_due_date_days')
+      )
       ->save();
 
     if (!$this->hasInvoiceNumbers() && $form_state->getValue(
@@ -155,6 +159,17 @@ class InvoiceSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Order number padding'),
       '#description' => $this->t(
         'Pad the order number with leading zeroes. Example: a value of 6 will output order number 52 as 000052.'
+      ),
+    ];
+
+    $form['invoice_due_date_days'] = [
+      '#type' => 'number',
+      '#default_value' => $config->get('invoice_due_date_days'),
+      '#min' => 1,
+      '#step' => 1,
+      '#title' => $this->t('Due date days'),
+      '#description' => $this->t(
+        'The amount of days after the invoice date that the due date will be set to by default.'
       ),
     ];
 

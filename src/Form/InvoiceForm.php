@@ -5,11 +5,13 @@ namespace Drupal\commerce_invoice\Form;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Datetime\DateFormatterInterface;
+use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\ContentEntityForm;
 use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Form controller for Invoice edit forms.
@@ -44,7 +46,12 @@ class InvoiceForm extends ContentEntityForm {
    * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
    *   The date formatter.
    */
-  public function __construct(EntityManagerInterface $entity_manager, EntityTypeBundleInfoInterface $entity_type_bundle_info = NULL, TimeInterface $time = NULL, DateFormatterInterface $date_formatter) {
+  public function __construct(
+    EntityManagerInterface $entity_manager,
+    EntityTypeBundleInfoInterface $entity_type_bundle_info = NULL,
+    TimeInterface $time = NULL,
+    DateFormatterInterface $date_formatter
+  ) {
     $this->dateFormatter = $date_formatter;
     parent::__construct($entity_manager, $entity_type_bundle_info, $time);
   }
@@ -79,7 +86,10 @@ class InvoiceForm extends ContentEntityForm {
       '#default_value' => $invoice->getChangedTime(),
     ];
 
-    $last_saved = $this->dateFormatter->format($invoice->getChangedTime(), 'short');
+    $last_saved = $this->dateFormatter->format(
+      $invoice->getChangedTime(),
+      'short'
+    );
     $form['advanced'] = [
       '#type' => 'container',
       '#attributes' => ['class' => ['entity-meta']],
@@ -93,7 +103,9 @@ class InvoiceForm extends ContentEntityForm {
       'state' => [
         '#type' => 'html_tag',
         '#tag' => 'h3',
-        '#value' => $invoice->isLocked() ? t('Confirmed invoice') : t('Draft invoice'),
+        '#value' => $invoice->isLocked() ? t('Confirmed invoice') : t(
+          'Draft invoice'
+        ),
         '#attributes' => [
           'class' => 'entity-meta__title',
         ],
@@ -124,7 +136,10 @@ class InvoiceForm extends ContentEntityForm {
     $store_count = $store_query->count()->execute();
     if ($store_count > 1) {
       $store_link = $invoice->getStore()->toLink()->toString();
-      $form['meta']['store'] = $this->fieldAsReadOnly($this->t('Store'), $store_link);
+      $form['meta']['store'] = $this->fieldAsReadOnly(
+        $this->t('Store'),
+        $store_link
+      );
     }
     // Move uid/mail widgets to the sidebar, or provide read-only alternatives.
     if (isset($form['uid'])) {
@@ -132,16 +147,25 @@ class InvoiceForm extends ContentEntityForm {
     }
     else {
       $user_link = $invoice->getCustomer()->toLink()->toString();
-      $form['customer']['uid'] = $this->fieldAsReadOnly($this->t('Customer'), $user_link);
+      $form['customer']['uid'] = $this->fieldAsReadOnly(
+        $this->t('Customer'),
+        $user_link
+      );
     }
     if (isset($form['mail'])) {
       $form['mail']['#group'] = 'customer';
     }
     elseif (!empty($invoice->getEmail())) {
-      $form['customer']['mail'] = $this->fieldAsReadOnly($this->t('Contact email'), $invoice->getEmail());
+      $form['customer']['mail'] = $this->fieldAsReadOnly(
+        $this->t('Contact email'),
+        $invoice->getEmail()
+      );
     }
     // All additional customer information should come after uid/mail.
-    $form['customer']['ip_address'] = $this->fieldAsReadOnly($this->t('IP address'), $invoice->getIpAddress());
+    $form['customer']['ip_address'] = $this->fieldAsReadOnly(
+      $this->t('IP address'),
+      $invoice->getIpAddress()
+    );
 
     $form['actions']['submit']['#value'] = t('Save');
 
@@ -150,12 +174,16 @@ class InvoiceForm extends ContentEntityForm {
         '#type' => 'checkbox',
         '#title' => t('Confirm this invoice.'),
         '#weight' => 99,
-        '#description' => t('After confirming an invoice it can no longer be changed.'),
+        '#description' => t(
+          'After confirming an invoice it can no longer be changed.'
+        ),
       ];
     }
     else {
       unset($form['actions']['submit'], $form['actions']['delete']);
-      $form['actions']['#markup'] = t('This invoice is confirmed and can no longer be modified.');
+      $form['actions']['#markup'] = t(
+        'This invoice is confirmed and can no longer be modified.'
+      );
     }
 
     return $form;
@@ -189,34 +217,131 @@ class InvoiceForm extends ContentEntityForm {
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
-    $entity = &$this->entity;
-    if ($entity->isLocked()) {
-      drupal_set_message(t('Invoice is confirmed and can no longer be modified'), 'error');
-      return FALSE;
+    if ($this->entity->isLocked()) {
+      $this->redirectToInvoiceAndShowErrorMessage();
+      return NULL;
     }
 
     if ($form_state->getValue('confirm', FALSE)) {
-      $invoiceNumberGenerationService = \Drupal::service('commerce_invoice.invoice_number_generation_service');
-      $invoice_number = $invoiceNumberGenerationService->generateAndSetInvoiceNumber();
-
-      $entity->set('invoice_number', $invoice_number);
-
-      $entity->lock();
+      $this->setInvoiceDate($form_state);
+      $this->setInvoiceDueDate($form_state);
+      $this->setInvoiceNumberAndLockInvoice();
     }
 
-    $status = parent::save($form, $form_state);
-
-    if ($status === SAVED_NEW) {
-      drupal_set_message($this->t('Created the %label Invoice.', [
-        '%label' => $entity->label(),
-      ]));
-    }
-
-    $form_state->setRedirect('entity.commerce_invoice.canonical', [
-      'commerce_invoice' => $this->entity->id(),
-    ]);
+    $this->showSaveSuccessMessage(parent::save($form, $form_state));
+    $this->setFormRedirectToInvoice($form_state);
 
     return NULL;
   }
 
+  private function getInvoiceNumber() {
+    $invoiceNumberGenerationService = \Drupal::service(
+      'commerce_invoice.invoice_number_generation_service'
+    );
+    return $invoiceNumberGenerationService->generateAndSetInvoiceNumber();
+  }
+
+  /**
+   * Sets the invoice date if empty.
+   *
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state.
+   */
+  private function setInvoiceDate(FormStateInterface $form_state) {
+    $invoice_date_data = $form_state->getValue('invoice_date');
+
+    if ($invoice_date_data[0]['value'] === NULL) {
+      $invoice_date = new DrupalDateTime();
+      $this->entity->set('invoice_date', $invoice_date->format('Y-m-d'));
+    }
+  }
+
+  /**
+   * Sets the invoice due date if empty.
+   *
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state.
+   */
+  private function setInvoiceDueDate(FormStateInterface $form_state) {
+    $invoice_due_date = $form_state->getValue('invoice_due_date');
+    if ($invoice_due_date[0]['value'] === NULL) {
+      $invoice_date_field_value = $this->entity->get('invoice_date')
+        ->first()
+        ->getValue();
+      $invoice_date_data = $invoice_date_field_value['value'];
+
+      $due_date_timestamps = strtotime(
+        '+30 days',
+        strtotime($invoice_date_data)
+      );
+      $due_date_datetime = new DrupalDateTime();
+      $due_date_datetime->setTimestamp($due_date_timestamps);
+
+      $this->entity->set(
+        'invoice_due_date',
+        $due_date_datetime->format('Y-m-d')
+      );
+    }
+  }
+
+  /**
+   * Sets the invoice number and locks the invoice.
+   */
+  private function setInvoiceNumberAndLockInvoice() {
+    $this->entity->set('invoice_number', $this->getInvoiceNumber());
+    $this->entity->lock();
+  }
+
+  /**
+   * Sets the form state redirect.
+   *
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state.
+   */
+  private function setFormRedirectToInvoice(FormStateInterface $form_state) {
+    $form_state->setRedirect(
+      'entity.commerce_invoice.canonical',
+      [
+        'commerce_invoice' => $this->entity->id(),
+      ]
+    );
+  }
+
+  /**
+   * Shows a success message.
+   *
+   * @param bool $status
+   */
+  private function showSaveSuccessMessage($status) {
+    if ($status === SAVED_NEW) {
+      drupal_set_message(
+        $this->t(
+          'Created the %label Invoice.',
+          [
+            '%label' => $this->entity->label(),
+          ]
+        )
+      );
+    }
+  }
+
+  /**
+   * Redirects the user to the invoice page.
+   *
+   * @return \Symfony\Component\HttpFoundation\RedirectResponse
+   */
+  private function redirectToInvoiceAndShowErrorMessage() {
+    drupal_set_message(
+      t('Invoice is confirmed and can no longer be modified'),
+      'error'
+    );
+    return new RedirectResponse(
+      \Drupal::urlGenerator()->generateFromRoute(
+        'entity.commerce_invoice.canonical',
+        [
+          'commerce_invoice' => $this->entity->id(),
+        ]
+      )
+    );
+  }
 }

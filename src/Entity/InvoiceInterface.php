@@ -39,14 +39,6 @@ interface InvoiceInterface {
   public function getOrder();
 
   /**
-   * Gets the invoice date.
-   *
-   * @return string
-   *   The formatted invoice date.
-   */
-  public function getInvoiceDate();
-
-  /**
    * Collects all adjustments that belong to the order.
    *
    * Unlike getAdjustments() which returns only order adjustments,
@@ -132,4 +124,16 @@ interface InvoiceInterface {
    *   The customer user ID, or NULL in case the order is anonymous.
    */
   public function getCustomerId();
+
+  /**
+   * If the invoice is locked.
+   *
+   * @return bool
+   */
+  public function isLocked();
+
+  /**
+   * Locks the invoice.
+   */
+  public function lock();
 }
