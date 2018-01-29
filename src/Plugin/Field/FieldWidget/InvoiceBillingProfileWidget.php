@@ -25,7 +25,7 @@ class InvoiceBillingProfileWidget extends BillingProfileWidget {
   ) {
     $entity_type = $field_definition->getTargetEntityTypeId();
     $field_name = $field_definition->getName();
-    return $entity_type === 'invoice' && $field_name === 'billing_profile';
+    return $entity_type === 'commerce_invoice' && $field_name === 'billing_profile';
   }
 
 }

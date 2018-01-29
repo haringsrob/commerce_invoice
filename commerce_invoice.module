@@ -18,10 +18,10 @@ function commerce_invoice_entity_operation(EntityInterface $entity) {
     if (\Drupal::currentUser()
       ->hasPermission('administer commerce_invoice')) {
       $operations = [];
-      $operations['invoice'] = [
+      $operations['commerce_invoice'] = [
         'title' => t('Create invoice from order'),
         'url' => Url::fromRoute(
-          'entity.invoice.generate_invoice',
+          'entity.commerce_invoice.generate_invoice',
           [
             'commerce_order' => $entity->id(),
           ]
@@ -44,8 +44,8 @@ function commerce_invoice_entity_operation(EntityInterface $entity) {
  */
 function commerce_invoice_clear_invoices() {
   \Drupal::keyValue('commerce_invoice')->delete('last_invoice_number');
-  $invoice_ids = \Drupal::entityQuery('invoice')->execute();
-  $storage_handler = \Drupal::entityTypeManager()->getStorage('invoice');
+  $invoice_ids = \Drupal::entityQuery('commerce_invoice')->execute();
+  $storage_handler = \Drupal::entityTypeManager()->getStorage('commerce_invoice');
   $entities = $storage_handler->loadMultiple($invoice_ids);
   $storage_handler->delete($entities);
 }

@@ -84,6 +84,13 @@ class InvoiceNumberGenerationService implements InvoiceNumberGenerationServiceIn
     }
 
     $last_order_number = $this->keyValueStore->get('last_invoice_number');
+
+    if (!empty($last_order_number) && !($last_order_number instanceof InvoiceNumber)) {
+      $current_year = date('Y');
+      $current_month = date('m');
+      $last_order_number = new InvoiceNumber($last_order_number, $current_year, $current_month);
+    }
+
     if (empty($last_order_number) || !($last_order_number instanceof InvoiceNumber)) {
       $last_order_number = NULL;
     }
@@ -95,7 +102,7 @@ class InvoiceNumberGenerationService implements InvoiceNumberGenerationServiceIn
     // We check the value of the counter and keep incrementing until the value
     // is unique.
     while (\Drupal::database()
-      ->query('SELECT invoice_number FROM {invoice} WHERE invoice_number = :invoice_number', [':invoice_number' => $invoice_number_formatted])
+      ->query('SELECT invoice_number FROM {commerce_invoice} WHERE invoice_number = :invoice_number', [':invoice_number' => $invoice_number_formatted])
       ->fetchField()) {
       $invoice_number->increment();
       $invoice_number = $generator->generate($last_order_number);

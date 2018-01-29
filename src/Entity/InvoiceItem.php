@@ -274,7 +274,7 @@ class InvoiceItem extends CommerceContentEntityBase {
     $fields['invoice_id'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Invoice'))
       ->setDescription(t('The parent invoice.'))
-      ->setSetting('target_type', 'invoice')
+      ->setSetting('target_type', 'commerce_invoice')
       ->setReadOnly(TRUE);
 
     $fields['purchased_entity'] = BaseFieldDefinition::create('entity_reference')

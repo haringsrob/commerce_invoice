@@ -212,8 +212,8 @@ class InvoiceForm extends ContentEntityForm {
       ]));
     }
 
-    $form_state->setRedirect('entity.invoice.canonical', [
-      'invoice' => $this->entity->id(),
+    $form_state->setRedirect('entity.commerce_invoice.canonical', [
+      'commerce_invoice' => $this->entity->id(),
     ]);
 
     return NULL;

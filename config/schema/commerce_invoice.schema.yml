@@ -11,3 +11,6 @@ commerce_invoice.settings:
     invoice_number_pattern:
       type: string
       label: 'Invoice number pattern'
+    invoice_number_start:
+      type: integer
+      label: 'Invoice number start'
