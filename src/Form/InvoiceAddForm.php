@@ -230,6 +230,9 @@ class InvoiceAddForm extends FormBase {
             ];
           }
         }
+        elseif ('adjustments' === $field) {
+          $values[$field] = $item->get($field);
+        }
         else {
           $values[$field] = $item->get($field)->getString();
         }
