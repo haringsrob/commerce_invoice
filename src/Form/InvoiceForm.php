@@ -234,6 +234,12 @@ class InvoiceForm extends ContentEntityForm {
     return NULL;
   }
 
+  /**
+   * Gets the invoice number.
+   *
+   * @return string
+   *   The invoice number.
+   */
   private function getInvoiceNumber() {
     $invoiceNumberGenerationService = \Drupal::service(
       'commerce_invoice.invoice_number_generation_service'
@@ -265,13 +271,15 @@ class InvoiceForm extends ContentEntityForm {
   private function setInvoiceDueDate(FormStateInterface $form_state) {
     $invoice_due_date = $form_state->getValue('invoice_due_date');
     if ($invoice_due_date[0]['value'] === NULL) {
+      $config = $this->configFactory()->get('commerce_invoice.settings');
+
       $invoice_date_field_value = $this->entity->get('invoice_date')
         ->first()
         ->getValue();
       $invoice_date_data = $invoice_date_field_value['value'];
 
       $due_date_timestamps = strtotime(
-        '+30 days',
+        '+' . $config->get('invoice_due_date_days') . ' days',
         strtotime($invoice_date_data)
       );
       $due_date_datetime = new DrupalDateTime();
@@ -311,6 +319,7 @@ class InvoiceForm extends ContentEntityForm {
    * Shows a success message.
    *
    * @param bool $status
+   *   The status.
    */
   private function showSaveSuccessMessage($status) {
     if ($status === SAVED_NEW) {
@@ -329,6 +338,7 @@ class InvoiceForm extends ContentEntityForm {
    * Redirects the user to the invoice page.
    *
    * @return \Symfony\Component\HttpFoundation\RedirectResponse
+   *   The redirect response.
    */
   private function redirectToInvoiceAndShowErrorMessage() {
     drupal_set_message(

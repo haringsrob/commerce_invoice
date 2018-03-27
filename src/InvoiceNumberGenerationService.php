@@ -2,8 +2,6 @@
 
 namespace Drupal\commerce_invoice;
 
-use Drupal\commerce_order\Entity\OrderInterface;
-use Drupal\commerce_invoice\Entity\InvoiceInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\KeyValueStore\KeyValueFactoryInterface;
 use Drupal\Core\Lock\LockBackendInterface;
