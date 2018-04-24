@@ -19,7 +19,7 @@ class OrderResolverService {
     $routeParameters = \Drupal::routeMatch()->getParameters();
     $order = $routeParameters->get('commerce_order');
 
-    if (!$order instanceof Order) {
+    if (!$order instanceof Order && $order !== NULL) {
       $order = Order::load($order);
     }
 
