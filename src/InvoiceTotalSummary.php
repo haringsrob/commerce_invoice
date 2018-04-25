@@ -3,63 +3,50 @@
 namespace Drupal\commerce_invoice;
 
 use Drupal\commerce_invoice\Entity\InvoiceInterface;
-use Drupal\commerce_order\AdjustmentTypeManager;
-use Drupal\Component\Utility\SortArray;
+use Drupal\commerce_order\Adjustment;
+use Drupal\commerce_order\AdjustmentTransformerInterface;
 
+/**
+ * Invoice total summary.
+ */
 class InvoiceTotalSummary implements InvoiceTotalSummaryInterface {
 
   /**
-   * The adjustment type manager.
+   * The adjustment transformer.
    *
-   * @var \Drupal\commerce_order\AdjustmentTypeManager
+   * @var \Drupal\commerce_order\AdjustmentTransformerInterface
    */
-  protected $adjustmentTypeManager;
+  protected $adjustmentTransformer;
 
   /**
-   * {@inheritdoc}
+   * Constructs a new OrderTotalSummary object.
+   *
+   * @param \Drupal\commerce_order\AdjustmentTransformerInterface $adjustment_transformer
+   *   The adjustment transformer.
    */
-  public function __construct(AdjustmentTypeManager $adjustment_type_manager) {
-    $this->adjustmentTypeManager = $adjustment_type_manager;
+  public function __construct(AdjustmentTransformerInterface $adjustment_transformer) {
+    $this->adjustmentTransformer = $adjustment_transformer;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function buildTotals(InvoiceInterface $order) {
-    $types = $this->adjustmentTypeManager->getDefinitions();
-    $adjustments = [];
-    foreach ($order->collectAdjustments() as $adjustment) {
-      $type = $adjustment->getType();
-      $source_id = $adjustment->getSourceId();
-      if (empty($source_id)) {
-        // Adjustments without a source ID are always shown standalone.
-        $key = count($adjustments);
-      }
-      else {
-        // Adjustments with the same type and source ID are combined.
-        $key = $type . '_' . $source_id;
-      }
-
-      if (empty($adjustments[$key])) {
-        $adjustments[$key] = [
-          'type' => $type,
-          'label' => $adjustment->getLabel(),
-          'total' => $adjustment->getAmount(),
-          'percentage' => $adjustment->getPercentage(),
-          'weight' => $types[$type]['weight'],
-        ];
-      }
-      else {
-        $adjustments[$key]['total'] = $adjustments[$key]['total']->add($adjustment->getAmount());
-      }
+  public function buildTotals(InvoiceInterface $invoice) {
+    $adjustments = $invoice->collectAdjustments();
+    $adjustments = $this->adjustmentTransformer->processAdjustments($adjustments);
+    // Convert the adjustments to arrays.
+    $adjustments = array_map(function (Adjustment $adjustment) {
+      return $adjustment->toArray();
+    }, $adjustments);
+    // Provide the "total" key for backwards compatibility reasons.
+    foreach ($adjustments as $index => $adjustment) {
+      $adjustments[$index]['total'] = $adjustments[$index]['amount'];
     }
-    // Sort the adjustments by weight.
-    uasort($adjustments, [SortArray::class, 'sortByWeightElement']);
 
     return [
-      'subtotal' => $order->getSubtotalPrice(),
+      'subtotal' => $invoice->getSubtotalPrice(),
       'adjustments' => $adjustments,
-      'total' => $order->getTotalPrice(),
+      'total' => $invoice->getTotalPrice(),
     ];
   }
 
