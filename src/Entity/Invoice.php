@@ -442,6 +442,16 @@ class Invoice extends CommerceContentEntityBase implements InvoiceInterface {
   }
 
   /**
+   * Checks the invoice state.
+   *
+   * @return string
+   *   The state.
+   */
+  public function getState() {
+    return $this->isLocked() ? 'completed' : 'draft';
+  }
+
+  /**
    * Unlocks an invoice.
    *
    * As invoices cannot be modified, we disallow unlocking.

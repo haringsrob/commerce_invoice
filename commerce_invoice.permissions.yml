@@ -7,3 +7,7 @@ view own invoice entities:
 administer commerce_invoice:
   title: 'Administer commerce_invoice'
   restrict access: true
+
+edit locked commerce_invoice:
+  title: 'Edit locked commerce_invoice'
+  restrict access: true

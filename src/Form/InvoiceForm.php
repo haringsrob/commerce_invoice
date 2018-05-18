@@ -180,10 +180,12 @@ class InvoiceForm extends ContentEntityForm {
       ];
     }
     else {
-      unset($form['actions']['submit'], $form['actions']['delete']);
-      $form['actions']['#markup'] = t(
-        'This invoice is confirmed and can no longer be modified.'
-      );
+      if (!\Drupal::currentUser()->hasPermission('edit locked commerce_invoice')) {
+        unset($form['actions']['submit'], $form['actions']['delete']);
+        $form['actions']['#markup'] = t(
+          'This invoice is confirmed and can no longer be modified.'
+        );
+      }
     }
 
     return $form;
