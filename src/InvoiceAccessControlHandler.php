@@ -27,9 +27,6 @@ class InvoiceAccessControlHandler extends EntityAccessControlHandler {
         return AccessResult::allowedIfHasPermission($account, 'view own invoice entities');
 
       case 'update':
-        if ($entity->isLocked()) {
-          return AccessResult::forbidden('Invoice is confirmed and can not be modified.');
-        }
         return parent::checkAccess($entity, $operation, $account);
 
       case 'delete':
