@@ -81,19 +81,19 @@ class InvoiceNumberGenerationService implements InvoiceNumberGenerationServiceIn
       $this->lock->wait('commerce_invoice.generator');
     }
 
-    $last_order_number = $this->keyValueStore->get('last_invoice_number');
+    $last_invoice_number = $this->keyValueStore->get('last_invoice_number');
 
-    if (!empty($last_order_number) && !($last_order_number instanceof InvoiceNumber)) {
+    if (empty($last_invoice_number) && !($last_invoice_number instanceof InvoiceNumber)) {
       $current_year = date('Y');
       $current_month = date('m');
-      $last_order_number = new InvoiceNumber($last_order_number, $current_year, $current_month);
+      $last_invoice_number = new InvoiceNumber($last_invoice_number, $current_year, $current_month);
     }
 
-    if (empty($last_order_number) || !($last_order_number instanceof InvoiceNumber)) {
-      $last_order_number = NULL;
+    if (empty($last_invoice_number) || !($last_invoice_number instanceof InvoiceNumber)) {
+      $last_invoice_number = NULL;
     }
 
-    $invoice_number = $generator->generate($last_order_number);
+    $invoice_number = $generator->generate($last_invoice_number);
     $invoice_number_formatted = $this->invoiceNumberFormatter->format($invoice_number);
     $invoice_number->setValue($invoice_number_formatted);
 
@@ -103,7 +103,7 @@ class InvoiceNumberGenerationService implements InvoiceNumberGenerationServiceIn
       ->query('SELECT invoice_number FROM {commerce_invoice} WHERE invoice_number = :invoice_number', [':invoice_number' => $invoice_number_formatted])
       ->fetchField()) {
       $invoice_number->increment();
-      $invoice_number = $generator->generate($last_order_number);
+      $invoice_number = $generator->generate($last_invoice_number);
       $invoice_number_formatted = $this->invoiceNumberFormatter->format($invoice_number);
       $invoice_number->setValue($invoice_number_formatted);
     }
