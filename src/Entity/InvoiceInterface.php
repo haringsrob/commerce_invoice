@@ -136,4 +136,16 @@ interface InvoiceInterface {
    * Locks the invoice.
    */
   public function lock();
+
+  /**
+   * @return string
+   */
+  public function getInvoiceNumber();
+
+  /**
+   * Confirms the invoice.
+   *
+   * @return void
+   */
+  public function confirm();
 }

@@ -14,3 +14,5 @@ services:
   commerce_invoice.invoice_total_summary:
     class: Drupal\commerce_invoice\InvoiceTotalSummary
     arguments: ['@commerce_order.adjustment_transformer']
+  commerce_invoice.manager:
+    class: Drupal\commerce_invoice\InvoiceManager

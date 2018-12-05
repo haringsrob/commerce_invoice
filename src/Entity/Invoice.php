@@ -6,6 +6,7 @@ use Drupal\commerce\Entity\CommerceContentEntityBase;
 use Drupal\commerce_order\Adjustment;
 use Drupal\commerce_order\Entity\OrderItemInterface;
 use Drupal\commerce_store\Entity\StoreInterface;
+use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -812,4 +813,28 @@ class Invoice extends CommerceContentEntityBase implements InvoiceInterface {
     }
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function confirm() {
+    $invoice_date = new DrupalDateTime();
+    $this->set('invoice_date', $invoice_date->format('Y-m-d'));
+
+    $this->set(
+      'invoice_due_date',
+      $invoice_date->add(\DateInterval::createFromDateString('30 days'))
+        ->format('Y-m-d')
+    );
+
+    $invoiceNumberGenerationService = \Drupal::service(
+      'commerce_invoice.invoice_number_generation_service'
+    );
+    $invoiceNumber = $invoiceNumberGenerationService->generateAndSetInvoiceNumber();
+
+
+    $this->set('invoice_number', $invoiceNumber);
+    $this->lock();
+
+    $this->save();
+  }
 }

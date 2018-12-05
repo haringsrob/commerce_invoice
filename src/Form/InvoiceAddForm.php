@@ -161,6 +161,7 @@ class InvoiceAddForm extends FormBase {
    *   The invoice entity.
    *
    * @todo: This needs to be rewritten.
+   * @todo: Use service instead.
    */
   private function copyOrderDataIfPresent(InvoiceInterface $invoice) {
     if ($order = $this->getOrderResolver()->getOrderFromRoute()) {
@@ -201,6 +202,7 @@ class InvoiceAddForm extends FormBase {
    *   Invoice.
    *
    * @todo: This code needs to be improved.
+   * @todo: Use service instead.
    */
   private function copyOrderItemsToInvoice(OrderInterface $order, InvoiceInterface $invoice) {
     $items_order = $order->get('order_items')->referencedEntities();
