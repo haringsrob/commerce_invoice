@@ -48,8 +48,8 @@ class InvoiceForm extends ContentEntityForm {
    */
   public function __construct(
     EntityManagerInterface $entity_manager,
-    EntityTypeBundleInfoInterface $entity_type_bundle_info = NULL,
-    TimeInterface $time = NULL,
+    EntityTypeBundleInfoInterface $entity_type_bundle_info,
+    TimeInterface $time,
     DateFormatterInterface $date_formatter
   ) {
     $this->dateFormatter = $date_formatter;

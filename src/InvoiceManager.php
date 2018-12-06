@@ -91,4 +91,12 @@ class InvoiceManager {
     $invoice->set('invoice_items', $items_invoice);
   }
 
+  public function invoiceExistsForOrder(OrderInterface $order): bool {
+    $invoiceStorage = \Drupal::entityTypeManager()->getStorage('commerce_invoice');
+    $orders = $invoiceStorage->loadByProperties(['order_id' => $order->id()]);
+
+    return !empty($orders);
+  }
+
+
 }

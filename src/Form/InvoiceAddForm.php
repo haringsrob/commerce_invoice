@@ -93,6 +93,7 @@ class InvoiceAddForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
+
     // Skip building the form if there are no available stores.
     $store_query = $this->storeStorage->getQuery();
     if ($store_query->count()->execute() === 0) {
@@ -112,6 +113,10 @@ class InvoiceAddForm extends FormBase {
     $form = $this->buildCustomerForm($form, $form_state);
 
     if ($order = $this->orderResolver->getOrderFromRoute()) {
+      if (\Drupal::service('commerce_invoice.manager')->invoiceExistsForOrder($order)) {
+        \Drupal::messenger()->addWarning(t('An invoice already exists for this order.'));
+      }
+
       if (!$form_state->hasValue('uid')) {
         $form['customer']['uid']['#default_value'] = $order->getCustomer();
       }

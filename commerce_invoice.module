@@ -15,8 +15,7 @@ use Drupal\Core\Url;
 function commerce_invoice_entity_operation(EntityInterface $entity) {
   $operations = [];
   if ($entity->getEntityTypeId() === 'commerce_order') {
-    if (\Drupal::currentUser()
-      ->hasPermission('administer commerce_invoice')) {
+    if (\Drupal::currentUser()->hasPermission('administer commerce_invoice')) {
       $operations = [];
       $operations['commerce_invoice'] = [
         'title' => t('Create invoice from order'),
@@ -45,7 +44,8 @@ function commerce_invoice_entity_operation(EntityInterface $entity) {
 function commerce_invoice_clear_invoices() {
   \Drupal::keyValue('commerce_invoice')->delete('last_invoice_number');
   $invoice_ids = \Drupal::entityQuery('commerce_invoice')->execute();
-  $storage_handler = \Drupal::entityTypeManager()->getStorage('commerce_invoice');
+  $storage_handler = \Drupal::entityTypeManager()
+    ->getStorage('commerce_invoice');
   $entities = $storage_handler->loadMultiple($invoice_ids);
   $storage_handler->delete($entities);
 }
