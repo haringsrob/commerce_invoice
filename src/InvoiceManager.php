@@ -20,6 +20,8 @@ class InvoiceManager {
 
     $matching_fields = array_intersect_key($order_fields, $invoice_fields);
 
+    $invoice->set('order_id', $order->id());
+
     // Exclude some fields that are already configured or should be ignored.
     unset(
       $matching_fields['uuid'],
