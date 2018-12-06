@@ -13,17 +13,16 @@ use Drupal\commerce_order\Entity\OrderInterface;
 class InvoiceManager {
 
   public function createInvoiceForOrder(OrderInterface $order): InvoiceInterface {
-    $invoice = Invoice::create();
+    $invoice = Invoice::create(['order_id' => [$order]]);
 
     $order_fields = $order->getFields(FALSE);
     $invoice_fields = $invoice->getFields(FALSE);
 
     $matching_fields = array_intersect_key($order_fields, $invoice_fields);
 
-    $invoice->set('order_id', $order->id());
-
     // Exclude some fields that are already configured or should be ignored.
     unset(
+      $matching_fields['order_id'],
       $matching_fields['uuid'],
       $matching_fields['changed'],
       $matching_fields['placed'],
